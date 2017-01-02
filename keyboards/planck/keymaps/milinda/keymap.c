@@ -30,7 +30,11 @@ enum planck_keycodes {
   LOWER,
   RAISE,
   BACKLIT,
-  EXT_PLV
+  EXT_PLV,
+  RGBLED_TOGGLE,
+  RGBLED_STEP_MODE,
+  RGBLED_INCREASE_VAL,
+  RGBLED_DECREASE_VAL
 };
 
 // Fillers to make layering more clear
@@ -107,8 +111,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = {
   {KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC},
   {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE},
-  {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,S(KC_NUHS),S(KC_NUBS), _______, _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+  {RGBLED_STEP_MODE, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,S(KC_NUHS),S(KC_NUBS), _______, _______, _______},
+  {RGBLED_TOGGLE, RGBLED_INCREASE_VAL, RGBLED_DECREASE_VAL, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
 },
 
 /* Raise
@@ -281,6 +285,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           PLAY_NOTE_ARRAY(tone_plover_gb, false, 0);
         #endif
         layer_off(_PLOVER);
+      }
+      return false;
+      break;
+    case RGBLED_TOGGLE:
+      //led operations
+      if (record->event.pressed) {
+        rgblight_toggle();
+      }
+      return false;
+      break;
+    case RGBLED_INCREASE_VAL:
+      if (record->event.pressed) {
+        rgblight_increase_val();
+      }
+      return false;
+      break;
+    case RGBLED_DECREASE_VAL:
+      if (record->event.pressed) {
+        rgblight_decrease_val();
+      }
+      return false;
+      break;
+    case RGBLED_STEP_MODE:
+      if (record->event.pressed) {
+        rgblight_step();
       }
       return false;
       break;
