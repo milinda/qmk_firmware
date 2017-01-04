@@ -313,6 +313,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case KC_TAB:
+      if (record->event.pressed) {
+        rgblight_mode(10);
+      }
+      return true;
+      break;
   }
   return true;
 }
